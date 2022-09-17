@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Persistencia de Datos</string>
+
+    <string name="main_activity_title">Restaurantes</string>
+    <string name="main_activity_item_menu">Añadir restaurante</string>
+    <string name="main_activity_content_description_item_menu">Sirve para añadir un restaurante</string>
+</resources>
