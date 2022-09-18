@@ -16,6 +16,8 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 public class RestaurantActivity extends AppCompatActivity {
 
+    public static final String FOOD_ACTIVITY = "com.example.persistenciadedatos.FOOD_ACTIVITY";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

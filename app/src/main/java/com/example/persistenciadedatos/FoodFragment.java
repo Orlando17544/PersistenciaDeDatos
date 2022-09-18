@@ -1,8 +1,12 @@
 package com.example.persistenciadedatos;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +17,10 @@ import android.view.ViewGroup;
  * Use the {@link FoodFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FoodFragment extends Fragment {
+public class FoodFragment extends Fragment implements OnFoodAdapterItemClickListener {
+
+    private FoodListAdapter adapter;
+    private DataViewModel dataViewModel;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -59,6 +66,28 @@ public class FoodFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_food, container, false);
+        View view = inflater.inflate(R.layout.fragment_food, container, false);
+
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
+        adapter = new FoodListAdapter(new FoodListAdapter.FoodDiff(), this::onFoodAdapterItemClickListener);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        dataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
+
+        dataViewModel.getAllRestaurants().observe(getViewLifecycleOwner(), restaurants -> {
+            adapter.submitList(restaurants);
+        });
+
+        registerForContextMenu(recyclerView);
+
+        return view;
+    }
+
+    @Override
+    public void onFoodAdapterItemClickListener(int position) {
+        Intent intent = new Intent(getActivity(), FoodActivity.class);
+        intent.putExtra(RestaurantActivity.FOOD_ACTIVITY, adapter.getCurrentList().get(position));
+        startActivity(intent);
     }
 }

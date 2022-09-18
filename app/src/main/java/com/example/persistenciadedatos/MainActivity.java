@@ -22,7 +22,6 @@ import com.google.android.material.appbar.MaterialToolbar;
 import java.util.LinkedList;
 
 public class MainActivity extends AppCompatActivity implements OnRestaurantAdapterItemClickListener {
-    private RecyclerView recyclerView;
     private RestaurantListAdapter adapter;
     private DataViewModel dataViewModel;
 
@@ -53,13 +52,9 @@ public class MainActivity extends AppCompatActivity implements OnRestaurantAdapt
             }
         });
 
-        // Get a handle to the RecyclerView.
-        recyclerView = findViewById(R.id.recycler_view);
-        // Create an adapter and supply the data to be displayed.
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
         adapter = new RestaurantListAdapter(new RestaurantListAdapter.RestaurantDiff(), this::onRestaurantAdapterItemClickListener);
-        // Connect the adapter with the RecyclerView.
         recyclerView.setAdapter(adapter);
-        // Give the RecyclerView a default layout manager.
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         dataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
