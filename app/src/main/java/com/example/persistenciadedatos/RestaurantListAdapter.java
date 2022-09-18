@@ -1,63 +1,85 @@
 package com.example.persistenciadedatos;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.view.ActionProvider;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.LinkedList;
+public class RestaurantListAdapter extends ListAdapter<Restaurant, RestaurantListAdapter.RestaurantViewHolder> {
+    private int currentPosition;
 
-public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAdapter.RestaurantViewHolder> {
-    private final LinkedList<String> restaurantList;
-    private LayoutInflater inflater;
+    private OnRestaurantAdapterItemClickListener restaurantAdapterItemClickListener;
 
-    public RestaurantListAdapter(Context context, LinkedList<String> restaurantList) {
-        this.inflater = LayoutInflater.from(context);
-        this.restaurantList = restaurantList;
+    public RestaurantListAdapter(@NonNull DiffUtil.ItemCallback<Restaurant> diffCallback, OnRestaurantAdapterItemClickListener listener) {
+        super(diffCallback);
+        this.restaurantAdapterItemClickListener = listener;
     }
 
     @NonNull
     @Override
     public RestaurantListAdapter.RestaurantViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = inflater.inflate(R.layout.restaurant_item,
-                parent, false);
-        return new RestaurantViewHolder(itemView, this);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.restaurant_item, parent, false);
+        return new RestaurantViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RestaurantListAdapter.RestaurantViewHolder holder, int position) {
-        String current = restaurantList.get(position);
-        holder.restaurantItemView.setText(current);
+        Restaurant current = getItem(position);
+        holder.restaurantItemView.setText(current.getName());
     }
 
-    @Override
-    public int getItemCount() {
-        return restaurantList.size();
+    public Restaurant getSelectedRestaurant() {
+        return getItem(currentPosition);
     }
 
-    class RestaurantViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    static class RestaurantDiff extends DiffUtil.ItemCallback<Restaurant> {
+
+        @Override
+        public boolean areItemsTheSame(@NonNull Restaurant oldItem, @NonNull Restaurant newItem) {
+            return oldItem == newItem;
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Restaurant oldItem, @NonNull Restaurant newItem) {
+            return oldItem.getName().equals(newItem.getName());
+        }
+    }
+
+    class RestaurantViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         public final TextView restaurantItemView;
-        final RestaurantListAdapter adapter;
 
-        public RestaurantViewHolder(@NonNull View itemView, RestaurantListAdapter adapter) {
+        public RestaurantViewHolder(@NonNull View itemView) {
             super(itemView);
             restaurantItemView = itemView.findViewById(R.id.restaurant);
-            this.adapter = adapter;
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            int position = getLayoutPosition();
+            restaurantAdapterItemClickListener.onRestaurantAdapterItemClickListener(getAbsoluteAdapterPosition());
+        }
 
-            String element = restaurantList.get(position);
-            restaurantList.set(position, "Clicked! " + element);
-
-            adapter.notifyDataSetChanged();
+        @Override
+        public boolean onLongClick(View view) {
+            currentPosition = getAbsoluteAdapterPosition();
+            return false;
         }
     }
 }

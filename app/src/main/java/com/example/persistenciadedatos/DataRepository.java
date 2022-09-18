@@ -44,6 +44,18 @@ public class DataRepository {
         });
     }
 
+    void updateRestaurant(Restaurant restaurant) {
+        AppRoomDatabase.databaseWriteExecutor.execute(() -> {
+            restaurantDao.update(restaurant);
+        });
+    }
+
+    void deleteRestaurant(Restaurant restaurant) {
+        AppRoomDatabase.databaseWriteExecutor.execute(() -> {
+            restaurantDao.delete(restaurant);
+        });
+    }
+
     void insertFood(Food food) {
         AppRoomDatabase.databaseWriteExecutor.execute(() -> {
             foodDao.insert(food);
