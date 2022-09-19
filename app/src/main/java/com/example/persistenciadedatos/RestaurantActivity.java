@@ -1,6 +1,7 @@
 package com.example.persistenciadedatos;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager2.widget.ViewPager2;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.tabs.TabLayout;
@@ -17,7 +19,9 @@ import com.google.android.material.tabs.TabLayoutMediator;
 public class RestaurantActivity extends AppCompatActivity {
 
     public static final String FOOD_ACTIVITY = "com.example.persistenciadedatos.FOOD_ACTIVITY";
-    public static final int NEW_RESTAURANT_ACTIVITY_REQUEST_CODE = 1;
+
+    public static final int NEW_FOOD_ACTIVITY_REQUEST_CODE = 1;
+    public static final int UPDATE_FOOD_ACTIVITY_REQUEST_CODE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +46,9 @@ public class RestaurantActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.add:
-                        Intent intent = new Intent(RestaurantActivity.this, FoodActivity.class);
-                        startActivityForResult(intent, NEW_RESTAURANT_ACTIVITY_REQUEST_CODE);
+                        Intent intent = new Intent(RestaurantActivity.this, NewFoodActivity.class);
+                        intent.putExtra("restaurantId", restaurant.getId());
+                        startActivityForResult(intent, NEW_FOOD_ACTIVITY_REQUEST_CODE);
                         return true;
                 }
                 return false;

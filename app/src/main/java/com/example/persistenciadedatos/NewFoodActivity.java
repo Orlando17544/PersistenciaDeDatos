@@ -11,12 +11,18 @@ import android.widget.Button;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
 
-public class FoodActivity extends AppCompatActivity {
+public class NewFoodActivity extends AppCompatActivity {
+
+    private Integer restaurantId;
+
+    public static final String EXTRA_REPLY = "com.example.persistenciadedatos.REPLY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food);
+
+        restaurantId = getIntent().getIntExtra("restaurantId", 0);
 
         Button registerFood = findViewById(R.id.register_button);
 
@@ -33,7 +39,7 @@ public class FoodActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(foodNameEditText.getText()) || TextUtils.isEmpty(foodPriceEditText.getText()) || TextUtils.isEmpty(foodDescriptionEditText.getText()) || TextUtils.isEmpty(foodTypeEditText.getText())) {
                     setResult(RESULT_CANCELED, replyIntent);
                 } else {
-                    Food food = new Food(1, foodNameEditText.getText().toString(), Double.parseDouble(foodPriceEditText.getText().toString()), foodDescriptionEditText.getText().toString(), foodTypeEditText.getText().toString());
+                    Food food = new Food(restaurantId, foodNameEditText.getText().toString(), Double.parseDouble(foodPriceEditText.getText().toString()), foodDescriptionEditText.getText().toString(), foodTypeEditText.getText().toString());
                     replyIntent.putExtra(EXTRA_REPLY, food);
                     setResult(RESULT_OK, replyIntent);
                 }

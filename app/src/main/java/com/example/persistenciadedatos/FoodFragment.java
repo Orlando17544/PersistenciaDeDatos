@@ -1,8 +1,11 @@
 package com.example.persistenciadedatos;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,7 +81,6 @@ public class FoodFragment extends Fragment implements OnFoodAdapterItemClickList
 
         dataViewModel.getFoods(restaurantId, foodType).observe(getViewLifecycleOwner(), foods -> {
             adapter.submitList(foods);
-            System.out.println(foods);
         });
 
         registerForContextMenu(recyclerView);
@@ -87,8 +90,30 @@ public class FoodFragment extends Fragment implements OnFoodAdapterItemClickList
 
     @Override
     public void onFoodAdapterItemClickListener(int position) {
-        Intent intent = new Intent(getActivity(), FoodActivity.class);
+        Intent intent = new Intent(getActivity(), NewFoodActivity.class);
         intent.putExtra(RestaurantActivity.FOOD_ACTIVITY, adapter.getCurrentList().get(position));
         startActivity(intent);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RestaurantActivity.NEW_FOOD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            Food food = data.getParcelableExtra(NewFoodActivity.EXTRA_REPLY);
+            dataViewModel.insertFood(food);
+        } else if (requestCode == RestaurantActivity.UPDATE_FOOD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            if (data.getStringExtra(UpdateRestaurantActivity.EXTRA_ACTION).equals("update")) {
+                Restaurant restaurant = data.getParcelableExtra(UpdateRestaurantActivity.EXTRA_REPLY);
+                dataViewModel.updateRestaurant(restaurant);
+            } else if (data.getStringExtra(UpdateRestaurantActivity.EXTRA_ACTION).equals("delete")) {
+                Restaurant restaurant = data.getParcelableExtra(UpdateRestaurantActivity.EXTRA_REPLY);
+                dataViewModel.deleteRestaurant(restaurant);
+            }
+        } else {
+            Toast.makeText(
+                    getActivity(),
+                    "No se pudo completar la operación",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 }

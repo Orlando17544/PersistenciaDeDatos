@@ -31,8 +31,12 @@ public class FoodListAdapter extends ListAdapter<Food, FoodListAdapter.FoodViewH
     @Override
     public void onBindViewHolder(@NonNull FoodListAdapter.FoodViewHolder holder, int position) {
         Food current = getItem(position);
+
         TextView foodName = holder.foodItemView.findViewById(R.id.food_name);
         foodName.setText(current.getName());
+
+        TextView foodPrice = holder.foodItemView.findViewById(R.id.food_price);
+        foodPrice.setText("$ " + String.valueOf(current.getPrice()));
     }
 
     public Food getSelectedFood() {
