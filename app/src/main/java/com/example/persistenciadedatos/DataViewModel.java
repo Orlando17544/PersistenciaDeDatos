@@ -35,4 +35,6 @@ public class DataViewModel extends AndroidViewModel {
 
     LiveData<List<Food>> getAllFoods() { return allFoods; }
     public void insertFood(Food food) { repository.insertFood(food); }
+
+    LiveData<List<Food>> getFoods(Integer restaurantId, String type) {return repository.getFoods(restaurantId, type);}
 }

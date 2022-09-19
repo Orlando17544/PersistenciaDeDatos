@@ -17,6 +17,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 public class RestaurantActivity extends AppCompatActivity {
 
     public static final String FOOD_ACTIVITY = "com.example.persistenciadedatos.FOOD_ACTIVITY";
+    public static final int NEW_RESTAURANT_ACTIVITY_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +42,9 @@ public class RestaurantActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.add:
-                        /*ItemMenu[] itemsMenu = restaurant.getMenu().getItems();
-
-                        Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
-                        intent.putExtra("com.example.restaurantes.CALLING_ACTIVITY", "RestaurantActivity");
-                        intent.putExtra(EXTRA_ITEMS_MENU, itemsMenu);
-                        startActivity(intent);
-                        return true;*/
+                        Intent intent = new Intent(RestaurantActivity.this, FoodActivity.class);
+                        startActivityForResult(intent, NEW_RESTAURANT_ACTIVITY_REQUEST_CODE);
+                        return true;
                 }
                 return false;
             }

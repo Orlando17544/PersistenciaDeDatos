@@ -6,9 +6,9 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 public class FoodPagerAdapter extends FragmentStateAdapter {
-    private int restaurantId;
+    private Integer restaurantId;
 
-    public FoodPagerAdapter(@NonNull FragmentActivity fragmentActivity, int restaurantId) {
+    public FoodPagerAdapter(@NonNull FragmentActivity fragmentActivity, Integer restaurantId) {
         super(fragmentActivity);
         this.restaurantId = restaurantId;
     }

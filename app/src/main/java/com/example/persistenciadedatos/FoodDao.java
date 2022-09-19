@@ -18,4 +18,7 @@ public interface FoodDao {
 
     @Query("SELECT * FROM food_table ORDER BY name ASC")
     LiveData<List<Food>> getAlphabetizedFoods();
+
+    @Query("SELECT * FROM food_table WHERE restaurant_id = :restaurantId AND type = :type")
+    LiveData<List<Food>> getFoods(Integer restaurantId, String type);
 }

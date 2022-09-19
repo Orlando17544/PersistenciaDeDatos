@@ -61,4 +61,8 @@ public class DataRepository {
             foodDao.insert(food);
         });
     }
+    
+    LiveData<List<Food>> getFoods(Integer restaurantId, String type) {
+            return foodDao.getFoods(restaurantId, type);
+    }
 }

@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements OnRestaurantAdapt
 
         dataViewModel.getAllRestaurants().observe(this, restaurants -> {
             adapter.submitList(restaurants);
+            System.out.println(restaurants + "Restaurantes");
         });
 
         registerForContextMenu(recyclerView);

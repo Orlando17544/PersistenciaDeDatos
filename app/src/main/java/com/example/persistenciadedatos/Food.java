@@ -1,5 +1,8 @@
 package com.example.persistenciadedatos;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -11,7 +14,7 @@ import androidx.room.PrimaryKey;
         childColumns = "restaurant_id",
         onDelete = ForeignKey.CASCADE)
 })
-public class Food {
+public class Food implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
@@ -38,12 +41,42 @@ public class Food {
     @ColumnInfo(name = "type")
     private String type;
 
-    public Food(@NonNull String name, @NonNull double price, @NonNull String description, @NonNull String type) {
+    public Food(@NonNull Integer restaurantId, @NonNull String name, @NonNull double price, @NonNull String description, @NonNull String type) {
+        this.restaurantId = restaurantId;
         this.name = name;
         this.price = price;
         this.description = description;
         this.type = type;
     }
+
+    protected Food(Parcel in) {
+        if (in.readByte() == 0) {
+            id = null;
+        } else {
+            id = in.readInt();
+        }
+        if (in.readByte() == 0) {
+            restaurantId = null;
+        } else {
+            restaurantId = in.readInt();
+        }
+        name = in.readString();
+        price = in.readDouble();
+        description = in.readString();
+        type = in.readString();
+    }
+
+    public static final Creator<Food> CREATOR = new Creator<Food>() {
+        @Override
+        public Food createFromParcel(Parcel in) {
+            return new Food(in);
+        }
+
+        @Override
+        public Food[] newArray(int size) {
+            return new Food[size];
+        }
+    };
 
     public Integer getId() {
         return this.id;
@@ -67,5 +100,30 @@ public class Food {
 
     public void setRestaurantId(Integer restaurantId) {
         this.restaurantId = restaurantId;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        if (id == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(id);
+        }
+        if (restaurantId == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(restaurantId);
+        }
+        parcel.writeString(name);
+        parcel.writeDouble(price);
+        parcel.writeString(description);
+        parcel.writeString(type);
     }
 }

@@ -28,8 +28,8 @@ public class FoodFragment extends Fragment implements OnFoodAdapterItemClickList
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private int mParam1;
-    private String mParam2;
+    private Integer restaurantId;
+    private String foodType;
 
     public FoodFragment() {
         // Required empty public constructor
@@ -48,7 +48,7 @@ public class FoodFragment extends Fragment implements OnFoodAdapterItemClickList
         FoodFragment fragment = new FoodFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM1, param2);
+        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,8 +57,8 @@ public class FoodFragment extends Fragment implements OnFoodAdapterItemClickList
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getInt(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            restaurantId = getArguments().getInt(ARG_PARAM1);
+            foodType = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -75,8 +75,9 @@ public class FoodFragment extends Fragment implements OnFoodAdapterItemClickList
 
         dataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
 
-        dataViewModel.getAllRestaurants().observe(getViewLifecycleOwner(), restaurants -> {
-            adapter.submitList(restaurants);
+        dataViewModel.getFoods(restaurantId, foodType).observe(getViewLifecycleOwner(), foods -> {
+            adapter.submitList(foods);
+            System.out.println(foods);
         });
 
         registerForContextMenu(recyclerView);

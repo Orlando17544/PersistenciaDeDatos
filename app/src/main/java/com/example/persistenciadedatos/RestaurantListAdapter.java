@@ -66,7 +66,7 @@ public class RestaurantListAdapter extends ListAdapter<Restaurant, RestaurantLis
 
         public RestaurantViewHolder(@NonNull View itemView) {
             super(itemView);
-            restaurantItemView = itemView.findViewById(R.id.restaurant);
+            restaurantItemView = itemView.findViewById(R.id.restaurant_name);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
         }
