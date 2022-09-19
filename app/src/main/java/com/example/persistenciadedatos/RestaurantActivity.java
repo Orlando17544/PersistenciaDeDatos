@@ -20,6 +20,10 @@ public class RestaurantActivity extends AppCompatActivity {
 
     public static final String FOOD_ACTIVITY = "com.example.persistenciadedatos.FOOD_ACTIVITY";
 
+    public static final String UPDATE_FOOD_ACTIVITY = "com.example.persistenciadedatos.UPDATE_FOOD_ACTIVITY";
+
+    public static final String UPDATE_FOOD_ACTIVITY2 = "com.example.persistenciadedatos.UPDATE_FOOD_ACTIVITY2";
+
     public static final int NEW_FOOD_ACTIVITY_REQUEST_CODE = 1;
     public static final int UPDATE_FOOD_ACTIVITY_REQUEST_CODE = 2;
 
@@ -30,34 +34,9 @@ public class RestaurantActivity extends AppCompatActivity {
 
         Restaurant restaurant = getIntent().getParcelableExtra(MainActivity.RESTAURANT_ACTIVITY);
 
-        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
-
-        topAppBar.setTitle(restaurant.getName());
-
-        topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
-        topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.add:
-                        Intent intent = new Intent(RestaurantActivity.this, NewFoodActivity.class);
-                        intent.putExtra("restaurantId", restaurant.getId());
-                        startActivityForResult(intent, NEW_FOOD_ACTIVITY_REQUEST_CODE);
-                        return true;
-                }
-                return false;
-            }
-        });
-
         ViewPager2 viewPager2 = findViewById(R.id.viewPager2);
 
-        viewPager2.setAdapter(new FoodPagerAdapter(this, restaurant.getId()));
+        viewPager2.setAdapter(new FoodPagerAdapter(this, restaurant));
 
         TabLayout tabLayout = findViewById(R.id.tabLayout);
 

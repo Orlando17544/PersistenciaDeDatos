@@ -6,11 +6,11 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 public class FoodPagerAdapter extends FragmentStateAdapter {
-    private Integer restaurantId;
+    private Restaurant restaurant;
 
-    public FoodPagerAdapter(@NonNull FragmentActivity fragmentActivity, Integer restaurantId) {
+    public FoodPagerAdapter(@NonNull FragmentActivity fragmentActivity, Restaurant restaurant) {
         super(fragmentActivity);
-        this.restaurantId = restaurantId;
+        this.restaurant = restaurant;
     }
 
     @NonNull
@@ -19,13 +19,13 @@ public class FoodPagerAdapter extends FragmentStateAdapter {
         Fragment fragment = null;
         switch (position) {
             case 0:
-                fragment = FoodFragment.newInstance(restaurantId, "food");
+                fragment = FoodFragment.newInstance(restaurant, "food");
                 break;
             case 1:
-                fragment = FoodFragment.newInstance(restaurantId, "drink");
+                fragment = FoodFragment.newInstance(restaurant, "drink");
                 break;
             case 2:
-                fragment = FoodFragment.newInstance(restaurantId, "complement");
+                fragment = FoodFragment.newInstance(restaurant, "complement");
                 break;
         }
 

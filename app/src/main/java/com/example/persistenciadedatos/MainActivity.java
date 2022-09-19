@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,8 +17,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
-
-import java.util.LinkedList;
 
 public class MainActivity extends AppCompatActivity implements OnRestaurantAdapterItemClickListener {
     private RestaurantListAdapter adapter;
@@ -93,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements OnRestaurantAdapt
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_activity_context_menu, menu);
+        inflater.inflate(R.menu.context_menu, menu);
     }
 
     @Override

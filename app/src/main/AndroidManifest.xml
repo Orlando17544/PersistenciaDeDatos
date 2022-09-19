@@ -14,6 +14,12 @@
         android:theme="@style/Theme.PersistenciaDeDatos"
         tools:targetApi="31">
         <activity
+            android:name=".FoodActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UpdateFoodActivity"
+            android:exported="false" />
+        <activity
             android:name=".NewFoodActivity"
             android:exported="false" />
         <activity

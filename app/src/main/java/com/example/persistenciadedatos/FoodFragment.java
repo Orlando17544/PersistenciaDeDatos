@@ -5,16 +5,23 @@ import static android.app.Activity.RESULT_OK;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.google.android.material.appbar.MaterialToolbar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,7 +39,7 @@ public class FoodFragment extends Fragment implements OnFoodAdapterItemClickList
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private Integer restaurantId;
+    private Restaurant restaurant;
     private String foodType;
 
     public FoodFragment() {
@@ -48,10 +55,10 @@ public class FoodFragment extends Fragment implements OnFoodAdapterItemClickList
      * @return A new instance of fragment FoodFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static FoodFragment newInstance(int param1, String param2) {
+    public static FoodFragment newInstance(Restaurant param1, String param2) {
         FoodFragment fragment = new FoodFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, param1);
+        args.putParcelable(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -61,7 +68,7 @@ public class FoodFragment extends Fragment implements OnFoodAdapterItemClickList
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            restaurantId = getArguments().getInt(ARG_PARAM1);
+            restaurant = getArguments().getParcelable(ARG_PARAM1);
             foodType = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -72,6 +79,33 @@ public class FoodFragment extends Fragment implements OnFoodAdapterItemClickList
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_food, container, false);
 
+        MaterialToolbar topAppBar = getActivity().findViewById(R.id.topAppBar);
+
+        topAppBar.setTitle(restaurant.getName());
+
+        topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().finish();
+            }
+        });
+
+        topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.add:
+                        Intent intent = new Intent(getActivity(), NewFoodActivity.class);
+                        intent.putExtra("restaurantId", restaurant.getId());
+                        startActivityForResult(intent, RestaurantActivity.NEW_FOOD_ACTIVITY_REQUEST_CODE);
+                        return true;
+                }
+                return false;
+            }
+        });
+
+        getActivity().findViewById(R.id.topAppBar);
+
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         adapter = new FoodListAdapter(new FoodListAdapter.FoodDiff(), this::onFoodAdapterItemClickListener);
         recyclerView.setAdapter(adapter);
@@ -79,7 +113,7 @@ public class FoodFragment extends Fragment implements OnFoodAdapterItemClickList
 
         dataViewModel = new ViewModelProvider(this).get(DataViewModel.class);
 
-        dataViewModel.getFoods(restaurantId, foodType).observe(getViewLifecycleOwner(), foods -> {
+        dataViewModel.getFoods(restaurant.getId(), foodType).observe(getViewLifecycleOwner(), foods -> {
             adapter.submitList(foods);
         });
 
@@ -89,25 +123,18 @@ public class FoodFragment extends Fragment implements OnFoodAdapterItemClickList
     }
 
     @Override
-    public void onFoodAdapterItemClickListener(int position) {
-        Intent intent = new Intent(getActivity(), NewFoodActivity.class);
-        intent.putExtra(RestaurantActivity.FOOD_ACTIVITY, adapter.getCurrentList().get(position));
-        startActivity(intent);
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RestaurantActivity.NEW_FOOD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             Food food = data.getParcelableExtra(NewFoodActivity.EXTRA_REPLY);
             dataViewModel.insertFood(food);
         } else if (requestCode == RestaurantActivity.UPDATE_FOOD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            if (data.getStringExtra(UpdateRestaurantActivity.EXTRA_ACTION).equals("update")) {
-                Restaurant restaurant = data.getParcelableExtra(UpdateRestaurantActivity.EXTRA_REPLY);
-                dataViewModel.updateRestaurant(restaurant);
-            } else if (data.getStringExtra(UpdateRestaurantActivity.EXTRA_ACTION).equals("delete")) {
-                Restaurant restaurant = data.getParcelableExtra(UpdateRestaurantActivity.EXTRA_REPLY);
-                dataViewModel.deleteRestaurant(restaurant);
+            if (data.getStringExtra(UpdateFoodActivity.EXTRA_ACTION).equals("update")) {
+                Food food = data.getParcelableExtra(UpdateFoodActivity.EXTRA_REPLY);
+                dataViewModel.updateFood(food);
+            } else if (data.getStringExtra(UpdateFoodActivity.EXTRA_ACTION).equals("delete")) {
+                Food food = data.getParcelableExtra(UpdateFoodActivity.EXTRA_REPLY);
+                dataViewModel.deleteFood(food);
             }
         } else {
             Toast.makeText(
@@ -115,5 +142,31 @@ public class FoodFragment extends Fragment implements OnFoodAdapterItemClickList
                     "No se pudo completar la operación",
                     Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        if (this.isVisible()) {
+            Intent intent = new Intent(getActivity(), UpdateFoodActivity.class);
+            intent.putExtra(RestaurantActivity.UPDATE_FOOD_ACTIVITY, adapter.getSelectedFood());
+            intent.putExtra(RestaurantActivity.UPDATE_FOOD_ACTIVITY2, restaurant);
+            startActivityForResult(intent, RestaurantActivity.UPDATE_FOOD_ACTIVITY_REQUEST_CODE);
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
+    @Override
+    public void onFoodAdapterItemClickListener(int position) {
+        Intent intent = new Intent(getActivity(), FoodActivity.class);
+        intent.putExtra(RestaurantActivity.FOOD_ACTIVITY, adapter.getCurrentList().get(position));
+        startActivity(intent);
     }
 }

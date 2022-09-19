@@ -61,6 +61,18 @@ public class DataRepository {
             foodDao.insert(food);
         });
     }
+
+    void updateFood(Food food) {
+        AppRoomDatabase.databaseWriteExecutor.execute(() -> {
+            foodDao.update(food);
+        });
+    }
+
+    void deleteFood(Food food) {
+        AppRoomDatabase.databaseWriteExecutor.execute(() -> {
+            foodDao.delete(food);
+        });
+    }
     
     LiveData<List<Food>> getFoods(Integer restaurantId, String type) {
             return foodDao.getFoods(restaurantId, type);
