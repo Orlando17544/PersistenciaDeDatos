@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".NewRestaurantActivity">
+    tools:context=".NewRestaurantActivity"
+    android:background="@color/third">
 
     <TextView
         android:layout_width="match_parent"

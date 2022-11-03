@@ -5,6 +5,7 @@
       <map>
         <entry key="app/src/main/res/layout/activity_food.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_new_food.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_restaurant.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_update_food.xml" value="0.14814814814814814" />
         <entry key="app/src/main/res/layout/food_item.xml" value="0.1" />

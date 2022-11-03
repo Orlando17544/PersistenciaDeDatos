@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".NewFoodActivity">
+    tools:context=".NewFoodActivity"
+    android:background="@color/third">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
