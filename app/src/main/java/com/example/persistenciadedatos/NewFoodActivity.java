@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class NewFoodActivity extends AppCompatActivity {
@@ -24,6 +25,15 @@ public class NewFoodActivity extends AppCompatActivity {
         restaurantId = getIntent().getIntExtra("restaurantId", 0);
 
         Button registerFood = findViewById(R.id.register_button);
+
+        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
+
+        topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         registerFood.setOnClickListener(new View.OnClickListener() {
             @Override
