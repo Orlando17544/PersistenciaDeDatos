@@ -1,13 +1,22 @@
 package com.example.persistenciadedatos;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.appbar.MaterialToolbar;
+
+import java.io.File;
 
 public class FoodActivity extends AppCompatActivity {
 
@@ -34,13 +43,15 @@ public class FoodActivity extends AppCompatActivity {
         TextView foodPriceTextView = findViewById(R.id.food_price_text_view);
         TextView foodDescriptionTextView = findViewById(R.id.food_description_text_view);
 
-        if (food.getType().equals("food")) {
-            foodTypeImageView.setImageResource(R.drawable.food);
-        } else if (food.getType().equals("drink")) {
-            foodTypeImageView.setImageResource(R.drawable.drink);
-        } else if (food.getType().equals("complement")) {
-            foodTypeImageView.setImageResource(R.drawable.complement);
+        Log.d("Error", food.getImagePath());
+
+        if (food.getImagePath().contains("android.resource")) {
+            foodTypeImageView.setImageURI(Uri.parse(food.getImagePath()));
+        } else {
+            foodTypeImageView.setImageURI(Uri.fromFile(new File(food.getImagePath())));
         }
+
+
 
         foodNameTextView.setText(food.getName());
         foodPriceTextView.setText(String.valueOf(food.getPrice()));

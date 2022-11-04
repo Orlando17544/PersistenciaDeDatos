@@ -52,7 +52,7 @@ public class UpdateFoodActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(foodNameEditText.getText()) || TextUtils.isEmpty(foodPriceEditText.getText()) || TextUtils.isEmpty(foodDescriptionEditText.getText()) || TextUtils.isEmpty(foodTypeEditText.getText())) {
                     setResult(RESULT_CANCELED, replyIntent);
                 } else {
-                    Food newFood = new Food(restaurant.getId(), foodNameEditText.getText().toString(), Double.valueOf(foodPriceEditText.getText().toString()), foodDescriptionEditText.getText().toString(), foodTypeEditText.getText().toString());
+                    Food newFood = new Food(restaurant.getId(), foodNameEditText.getText().toString(), Double.valueOf(foodPriceEditText.getText().toString()), foodDescriptionEditText.getText().toString(), foodTypeEditText.getText().toString(), "");
                     newFood.setId(food.getId());
                     replyIntent.putExtra(EXTRA_REPLY, newFood);
                     replyIntent.putExtra(EXTRA_ACTION, "update");

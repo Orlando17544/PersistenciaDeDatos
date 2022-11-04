@@ -41,12 +41,17 @@ public class Food implements Parcelable {
     @ColumnInfo(name = "type")
     private String type;
 
-    public Food(@NonNull Integer restaurantId, @NonNull String name, @NonNull double price, @NonNull String description, @NonNull String type) {
+    @NonNull
+    @ColumnInfo(name = "imagePath")
+    private String imagePath;
+
+    public Food(@NonNull Integer restaurantId, @NonNull String name, @NonNull double price, @NonNull String description, @NonNull String type, @NonNull String imagePath) {
         this.restaurantId = restaurantId;
         this.name = name;
         this.price = price;
         this.description = description;
         this.type = type;
+        this.imagePath = imagePath;
     }
 
     protected Food(Parcel in) {
@@ -64,6 +69,7 @@ public class Food implements Parcelable {
         price = in.readDouble();
         description = in.readString();
         type = in.readString();
+        imagePath = in.readString();
     }
 
     public static final Creator<Food> CREATOR = new Creator<Food>() {
@@ -93,6 +99,8 @@ public class Food implements Parcelable {
     public String getDescription(){return this.description;}
 
     public String getType(){return this.type;}
+
+    public String getImagePath() {return this.imagePath;}
 
     public void setId(Integer id) {
         this.id = id;
@@ -125,5 +133,6 @@ public class Food implements Parcelable {
         parcel.writeDouble(price);
         parcel.writeString(description);
         parcel.writeString(type);
+        parcel.writeString(imagePath);
     }
 }
