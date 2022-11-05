@@ -35,7 +35,7 @@ public class NewFoodActivity extends AppCompatActivity {
 
     public static final String EXTRA_REPLY = "com.example.persistenciadedatos.REPLY";
 
-    private static final String[] COUNTRIES = new String[]{
+    private static final String[] TYPES = new String[]{
             "Comida", "Bebida", "Complemento"
     };
 
@@ -77,7 +77,7 @@ public class NewFoodActivity extends AppCompatActivity {
             }
         });
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, COUNTRIES);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, TYPES);
         foodTypeAutoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.food_type);
         foodTypeAutoCompleteTextView.setAdapter(adapter);
 

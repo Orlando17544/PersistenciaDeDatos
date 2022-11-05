@@ -43,7 +43,6 @@ public class FoodActivity extends AppCompatActivity {
         TextView foodPriceTextView = findViewById(R.id.food_price_text_view);
         TextView foodDescriptionTextView = findViewById(R.id.food_description_text_view);
 
-        Log.d("Error", food.getImagePath());
 
         if (food.getImagePath().contains("android.resource")) {
             foodTypeImageView.setImageURI(Uri.parse(food.getImagePath()));
